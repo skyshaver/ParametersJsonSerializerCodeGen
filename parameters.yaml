@@ -1,0 +1,44 @@
+Parameters:
+    name: Parameters
+    projectNamespace: sky_trem
+    parameters: 
+        - name: modulationRate
+          juceType: juce::AudioParameterFloat
+          serializerType: float
+          isChoice: false
+        - name: modulationDepth
+          juceType: juce::AudioParameterFloat
+          serializerType: float
+          isChoice: false
+        - name: gainInDb
+          juceType: juce::AudioParameterFloat
+          serializerType: float
+          isChoice: false
+        - name: bypass
+          juceType: juce::AudioParameterBool
+          serializerType: bool
+          isChoice: false
+        - name: lfoWaveform
+          juceType: juce::AudioParameterChoice
+          serializerType: juce::String
+          isChoice: true
+        - name: bpmDivision
+          juceType: juce::AudioParameterChoice
+          serializerType: juce::String
+          isChoice: true
+        - name: isRateInHz
+          juceType: juce::AudioParameterBool
+          serializerType: bool
+          isChoice: false
+        - name: bpm
+          juceType: juce::AudioParameterFloat
+          serializerType: float
+          isChoice: false
+        - name: isModDepthRando
+          juceType: juce::AudioParameterBool
+          serializerType: bool
+          isChoice: true
+        - name: modDepthRandoRange
+          juceType: juce::AudioParameterChoice
+          serializerType: juce::String
+          isChoice: false
