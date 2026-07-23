@@ -93,7 +93,8 @@ namespace sky_trem {
 		if (lfoWaveformIndex < 0) {			
 			return juce::Result::fail(
 				"invalid modulation waveform name; supported values are: " +
-				parameters.lfoWaveform.choices.joinIntoString(", "));
+				parameters.lfoWaveform.choices.joinIntoString(", ")
+			);
 		}
 
 		const auto bpmDivisionIndex = parameters.bpmDivision.choices.indexOf(parsedParamaters->bpmDivision);
@@ -108,7 +109,7 @@ namespace sky_trem {
 		if (modDepthRandoRangeIndex < 0) {
 			return juce::Result::fail(
 				"invalid mod depth rando range name; supported values are: " +
-				parameters.bpmDivision.choices.joinIntoString(", ")
+				parameters.modDepthRandoRange.choices.joinIntoString(", ")
 			);
 		}
 		

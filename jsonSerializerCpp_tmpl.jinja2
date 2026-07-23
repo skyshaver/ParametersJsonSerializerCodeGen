@@ -4,9 +4,9 @@
 
 namespace {
 	struct SerializableParameters {				
-{% for parameter in parameters.parameters %}
-{{"\t\t"}}{{parameter.serializerType}} {{parameter.name}};
-{% endfor %}
+		{% for parameter in parameters.parameters %}
+		{{parameter.serializerType}} {{parameter.name}};
+		{% endfor %}
 
 		static constexpr auto marshallingVersion = 1; //set to std::null_opt to avoid serializing __version__
 
@@ -32,9 +32,9 @@ namespace {
 
 	SerializableParameters from(const {{parameters.projectNamespace}}::Parameters& parameters) {
 		return {
-{% for parameter in parameters.parameters %}
-{{"\t\t\t"}}.{{parameter.name}} = parameters.{{parameter.name}}{{".getCurrentChoiceName()" if parameter.isChoice == true else ".get()"}},	
-{% endfor %}
+			{% for parameter in parameters.parameters %}
+			.{{parameter.name}} = parameters.{{parameter.name}}{{".getCurrentChoiceName()" if parameter.isChoice == true else ".get()"}},	
+			{% endfor %}
 		};
 	}
 }
@@ -68,41 +68,27 @@ namespace {{parameters.projectNamespace}} {
 		if (!parsedParamaters.has_value()) {
 			return juce::Result::fail("failed to parse parameters from json");
 		}
-		
-		const auto lfoWaveformIndex = parameters.lfoWaveform.choices.indexOf(parsedParamaters->lfoWaveform);
-		if (lfoWaveformIndex < 0) {			
-			return juce::Result::fail(
-				"invalid modulation waveform name; supported values are: " +
-				parameters.lfoWaveform.choices.joinIntoString(", "));
-		}
 
-		const auto bpmDivisionIndex = parameters.bpmDivision.choices.indexOf(parsedParamaters->bpmDivision);
-		if (bpmDivisionIndex < 0) {
+		{% for parameter in parameters.parameters %}
+		{% if parameter.isChoice == true %}
+		const auto {{parameter.name}}Index = parameters.{{parameter.name}}.choices.indexOf(parsedParamaters->{{parameter.name}});
+		if ({{parameter.name}}Index < 0) {			
 			return juce::Result::fail(
-				"invalid bpm division name; supported values are: " +
-				parameters.bpmDivision.choices.joinIntoString(", ")
+				"invalid {{parameter.name}}; supported values are: " +
+				parameters.{{parameter.name}}.choices.joinIntoString(", ")
 			);
-		}
+		}		
+		{% endif %}
+		{% endfor %}				
 
-		const auto modDepthRandoRangeIndex = parameters.modDepthRandoRange.choices.indexOf(parsedParamaters->modDepthRandoRange);
-		if (modDepthRandoRangeIndex < 0) {
-			return juce::Result::fail(
-				"invalid mod depth rando range name; supported values are: " +
-				parameters.bpmDivision.choices.joinIntoString(", ")
-			);
-		}
-		
-		parameters.modulationRate = parsedParamaters->modulationRate;
-		parameters.modulationDepth = parsedParamaters->modulationDepth;
-		parameters.gainInDb = parsedParamaters->gainInDb;
-		parameters.bypass = parsedParamaters->bypass;
-		parameters.lfoWaveform = lfoWaveformIndex;
-		parameters.bpmDivision = bpmDivisionIndex;
-		parameters.isRateInHz = parsedParamaters->isRateInHz;
-		parameters.bpm = parsedParamaters->bpm;
-		parameters.isModDepthRando = parsedParamaters->isModDepthRando;
-		parameters.modDepthRandoRange = modDepthRandoRangeIndex;
+		{% for parameter in parameters.parameters %}
+		{% if parameter.isChoice == true %}
+		parameters.{{parameter.name}} = {{parameter.name}}Index;
+		{% else %}
+		parameters.{{parameter.name}} = parsedParamaters->{{parameter.name}};		
+		{% endif %}
+		{% endfor %}
 		return juce::Result::ok();
 		
 	}
-}  // namespace sky_trem
+}  // namespace {{parameters.projectNamespace}}
