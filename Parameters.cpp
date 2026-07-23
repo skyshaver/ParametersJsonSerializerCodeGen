@@ -1,6 +1,9 @@
-// it may make more sense for this to live in Parameters as we have dangerous separation of redundant info
+//
+// This code is generated. Do not edit by hand.
+//
+
 namespace {
-	struct SerializableParameters {
+	struct SerializableParameters {				
 		float modulationRate;
 		float modulationDepth;
 		float gainInDb;
@@ -11,18 +14,6 @@ namespace {
 		float bpm;
 		bool isModDepthRando;
 		juce::String modDepthRandoRange;
-		
-		float modulationRate
-		float modulationDepth
-		float gainInDb
-		bool bypass
-		juce::String lfoWaveform
-		juce::String bpmDivision
-		bool isRateInHz
-		float bpm
-		bool isModDepthRando
-		juce::String modDepthRandoRange
-
 
 		static constexpr auto marshallingVersion = 1; //set to std::null_opt to avoid serializing __version__
 
@@ -37,18 +28,7 @@ namespace {
 
 			if (pluginName != PLUGIN_NAME) {
 				return;
-			}
-
-			archive(juce::named("modulationRate", p.modulationRate),
-				juce::named("modulationDepth", p.modulationDepth),
-				juce::named("gainInDb", p.gainInDb),
-				juce::named("bypass", p.bypass),
-				juce::named("lfoWaveform", p.lfoWaveform),
-				juce::named("bpmDivision", p.bpmDivision),
-				juce::named("isRateInHz", p.isRateInHz),
-				juce::named("bpm", p.bpm),
-				juce::named("isModDepthRando", p.isModDepthRando),
-				juce::named("modDepthRandoRange", p.modDepthRandoRange));
+			}			
 
 			archive(juce::named("modulationRate", p.modulationRate),
 				juce::named("modulationDepth", p.modulationDepth),
@@ -66,19 +46,20 @@ namespace {
 
 	SerializableParameters from(const sky_trem::Parameters& parameters) {
 		return {
-			.modulationRate = parameters.modulationRate.get(),
-			.modulationDepth = parameters.modulationDepth.get(),
-			.gainInDb = parameters.gainInDb.get(),
-			.bypass = parameters.bypass.get(),
-			.lfoWaveform = parameters.lfoWaveform.getCurrentChoiceName(),
-			.bpmDivision = parameters.bpmDivision.getCurrentChoiceName(),
-			.isRateInHz = parameters.isRateInHz.get(),
-			.bpm = parameters.bpm.get(),
-			.isModDepthRando = parameters.isModDepthRando.get(),
-			.modDepthRandoRange = parameters.modDepthRandoRange.getCurrentChoiceName(),
+			.modulationRate = parameters.modulationRate.get(),	
+			.modulationDepth = parameters.modulationDepth.get(),	
+			.gainInDb = parameters.gainInDb.get(),	
+			.bypass = parameters.bypass.get(),	
+			.lfoWaveform = parameters.lfoWaveform.getCurrentChoiceName(),	
+			.bpmDivision = parameters.bpmDivision.getCurrentChoiceName(),	
+			.isRateInHz = parameters.isRateInHz.get(),	
+			.bpm = parameters.bpm.get(),	
+			.isModDepthRando = parameters.isModDepthRando.get(),	
+			.modDepthRandoRange = parameters.modDepthRandoRange.getCurrentChoiceName(),	
 		};
 	}
 }
+
 
 namespace sky_trem {
 

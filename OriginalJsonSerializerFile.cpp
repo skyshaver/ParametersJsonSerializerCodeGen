@@ -3,10 +3,17 @@
 //
 
 namespace {
-	struct SerializableParameters {				
-{% for parameter in parameters.parameters %}
-{{"\t\t"}}{{parameter.serializerType}} {{parameter.name}};
-{% endfor %}
+	struct SerializableParameters {
+		float modulationRate;
+		float modulationDepth;
+		float gainInDb;
+		bool bypass;
+		juce::String lfoWaveform;
+		juce::String bpmDivision;
+		bool isRateInHz;
+		float bpm;
+		bool isModDepthRando;
+		juce::String modDepthRandoRange;
 
 		static constexpr auto marshallingVersion = 1; //set to std::null_opt to avoid serializing __version__
 
@@ -21,26 +28,39 @@ namespace {
 
 			if (pluginName != PLUGIN_NAME) {
 				return;
-			}			
+			}
 
-{% for parameter in parameters.parameters %}
-{{"\t\t\tarchive(" if loop.first else "\t\t\t\t" }}juce::named("{{parameter.name}}", p.{{parameter.name}}){{");" if loop.last else "," }}
-{% endfor %}
+			archive(juce::named("modulationRate", p.modulationRate),
+				juce::named("modulationDepth", p.modulationDepth),
+				juce::named("gainInDb", p.gainInDb),
+				juce::named("bypass", p.bypass),
+				juce::named("lfoWaveform", p.lfoWaveform),
+				juce::named("bpmDivision", p.bpmDivision),
+				juce::named("isRateInHz", p.isRateInHz),
+				juce::named("bpm", p.bpm),
+				juce::named("isModDepthRando", p.isModDepthRando),
+				juce::named("modDepthRandoRange", p.modDepthRandoRange));
 
 		}
 	};
 
-	SerializableParameters from(const {{parameters.projectNamespace}}::Parameters& parameters) {
+	SerializableParameters from(const sky_trem::Parameters& parameters) {
 		return {
-{% for parameter in parameters.parameters %}
-{{"\t\t\t"}}.{{parameter.name}} = parameters.{{parameter.name}}{{".getCurrentChoiceName()" if parameter.isChoice == true else ".get()"}},	
-{% endfor %}
+			.modulationRate = parameters.modulationRate.get(),
+			.modulationDepth = parameters.modulationDepth.get(),
+			.gainInDb = parameters.gainInDb.get(),
+			.bypass = parameters.bypass.get(),
+			.lfoWaveform = parameters.lfoWaveform.getCurrentChoiceName(),
+			.bpmDivision = parameters.bpmDivision.getCurrentChoiceName(),
+			.isRateInHz = parameters.isRateInHz.get(),
+			.bpm = parameters.bpm.get(),
+			.isModDepthRando = parameters.isModDepthRando.get(),
+			.modDepthRandoRange = parameters.modDepthRandoRange.getCurrentChoiceName(),
 		};
 	}
 }
 
-
-namespace {{parameters.projectNamespace}} {
+namespace sky_trem {
 
 
 	void JsonSerializer::serialize(const Parameters& parameters, juce::OutputStream& output) {

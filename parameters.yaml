@@ -37,8 +37,8 @@ Parameters:
         - name: isModDepthRando
           juceType: juce::AudioParameterBool
           serializerType: bool
-          isChoice: true
+          isChoice: false
         - name: modDepthRandoRange
           juceType: juce::AudioParameterChoice
           serializerType: juce::String
-          isChoice: false
+          isChoice: true
